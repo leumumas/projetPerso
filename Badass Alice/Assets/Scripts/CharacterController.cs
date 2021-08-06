@@ -1,19 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CharacterController : MonoBehaviour
 {
     public float runSpeed = 8;
     public float walkSpeed = 12;
 
-    Rigidbody myRigibody;
+    public Rigidbody myRigibody;
 
 
     public bool isGrounded;
     public float jumpHeight = 3;
     public Vector3 jump;
-   
+    private float inputX;
+    Vector3 moveVector;
 
 
     // Start is called before the first frame update
@@ -29,7 +31,12 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        myRigibody.velocity = new Vector2(inputX * walkSpeed, myRigibody.velocity.y);
 
+        if (isGrounded == false)
+        {
+            moveVector += Physics.gravity;
+        }
     }
 
 
@@ -39,7 +46,7 @@ public class CharacterController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        float jumpPress = Input.GetAxis("Fire1");
+        /*float jumpPress = Input.GetAxis("Fire1");
         if (isGrounded && jumpPress!=0)
         {
             Debug.Log("yeah");
@@ -48,15 +55,26 @@ public class CharacterController : MonoBehaviour
         }
    
         float move = Input.GetAxis("Horizontal");
-        myRigibody.velocity = new Vector3(move * runSpeed, myRigibody.velocity.y, 0);
-     
+        myRigibody.velocity = new Vector3(move * runSpeed, myRigibody.velocity.y, 0);*/
     }
 
-    void Jump()
+    public void Jump(InputAction.CallbackContext value)
     {
-        
-
+        if (isGrounded)
+        {
+            Debug.Log("yeah");
+            isGrounded = false;
+            myRigibody.AddForce(jump * jumpHeight, ForceMode.Impulse);
+        }
     }
 
-    
+    public void Move(InputAction.CallbackContext context)
+    {
+
+        if (isGrounded == true)
+        {
+          inputX = context.ReadValue<Vector2>().x;
+        }
+        
+    }
 }

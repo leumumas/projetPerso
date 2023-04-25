@@ -9,9 +9,11 @@ public class CharacterControlSize : MonoBehaviour
     public float sizeSmaller;
     public float sizeHighest;
 
+
     // Start is called before the first frame update
     void Start()
     {
+        gameObject.tag = "Player";
         myTransform = GetComponent<Transform>();
     }
 
@@ -25,12 +27,17 @@ public class CharacterControlSize : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == "Smaller")
+        if (other.tag == "Smaller")
         {
             Debug.Log ("Smaller, bitch!");
-            myTransform.localScale += new Vector3( sizeSmaller, 0, sizeSmaller);
+            myTransform.localScale += new Vector3(sizeSmaller, sizeSmaller, 0);
+        }
+        if (other.tag == "GrownUp")
+        {
+            Debug.Log("Grown Up, Bitch!");
+            myTransform.localScale += new Vector3(sizeHighest, sizeHighest, 0);
         }
     }
 }

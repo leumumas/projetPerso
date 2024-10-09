@@ -5,76 +5,85 @@ using UnityEngine.InputSystem;
 
 public class CharacterController : MonoBehaviour
 {
-    public float runSpeed = 8;
-    public float walkSpeed = 12;
+    [SerializeField]
+    private float runSpeed = 8;
+    [SerializeField]
+    private float walkSpeed = 12;
 
-    public Rigidbody myRigibody;
+    [SerializeField]
+    private Rigidbody myRigibody;
+    [SerializeField]
+    private float gravityScale = 5;
+    [SerializeField]
+    private Camera myCamera;
+    [SerializeField]
+    private float closest = -10;
+    [SerializeField]
+    private float farthest = -10;
 
+    [SerializeField]
+    private float jumpHeight = 3;
 
-    public bool isGrounded;
-    public float jumpHeight = 3;
-    public Vector3 jump;
+    private float distToGround = 0.1f;
+    private Vector3 jump;
     private float inputX;
-    Vector3 moveVector;
+    private float cameraInputZ;
+    private bool isGrounded;
+    private Vector3 moveVector;
+    private Vector3 originalCamPosition;
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        originalCamPosition = myCamera.transform.localPosition;
         Cursor.visible = false;
-        myRigibody = GetComponent<Rigidbody>();
-        jump = new Vector3 (0.0f, 2.0f, 0.0f);
-
-
+        jump = new Vector3 (0.0f, 1.0f, 0.0f);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
+        if (cameraInputZ < 0 && originalCamPosition.z > farthest || cameraInputZ > 0 && originalCamPosition.z < closest)
+        {
+            originalCamPosition.z += cameraInputZ;
+        }
+        myCamera.transform.position = myRigibody.transform.position + originalCamPosition;
         myRigibody.velocity = new Vector2(inputX * walkSpeed, myRigibody.velocity.y);
 
-        if (isGrounded == false)
+        if (!IsGrounded())
         {
             moveVector += Physics.gravity;
         }
-    }
 
-
-    private void OnCollisionStay()
-    {
-        isGrounded = true;
-    }
-    private void FixedUpdate()
-    {
-        /*float jumpPress = Input.GetAxis("Fire1");
-        if (isGrounded && jumpPress!=0)
-        {
-            Debug.Log("yeah");
-            isGrounded = false;
-            myRigibody.AddForce(jump * jumpHeight, ForceMode.Impulse);
-        }
-   
-        float move = Input.GetAxis("Horizontal");
-        myRigibody.velocity = new Vector3(move * runSpeed, myRigibody.velocity.y, 0);*/
+        myRigibody.AddForce(Physics.gravity * (gravityScale - 1) * myRigibody.mass);
     }
 
     public void Jump(InputAction.CallbackContext value)
     {
-        if (isGrounded)
+        if (IsGrounded() && value.performed)
         {
             Debug.Log("yeah");
+            float jumpForce = Mathf.Sqrt(jumpHeight * -2 * (Physics2D.gravity.y * (gravityScale - 1) * myRigibody.mass));
             isGrounded = false;
-            myRigibody.AddForce(jump * jumpHeight, ForceMode.Impulse);
+            myRigibody.AddForce(jump * jumpForce, ForceMode.Impulse);
         }
     }
 
     public void Move(InputAction.CallbackContext context)
     {
-
-        if (isGrounded == true)
-        {
           inputX = context.ReadValue<Vector2>().x;
-        }
-        
+    }
+
+    private bool IsGrounded()
+    {
+        Debug.DrawLine(transform.position + new Vector3(0, 0.05f), transform.position + -Vector3.up * 0.1f, Color.green);
+        LayerMask mask = LayerMask.GetMask("Ground");
+        bool grounded = Physics.Raycast(transform.position + new Vector3(0, 0.05f), -Vector3.up, out RaycastHit hitInfo, 0.15f, mask);
+        return grounded;
+    }
+
+    public void CameraZoom(InputAction.CallbackContext context)
+    {
+        cameraInputZ = context.ReadValue<float>();
     }
 }

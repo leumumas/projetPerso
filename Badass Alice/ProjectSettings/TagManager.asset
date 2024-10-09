@@ -7,6 +7,7 @@ TagManager:
   - Fire
   - Smaller
   - GrownUp
+  - Interact
   layers:
   - Default
   - TransparentFX

@@ -93,11 +93,11 @@ GameObject:
   - component: {fileID: 960379788}
   - component: {fileID: 960379785}
   - component: {fileID: 960379790}
-  - component: {fileID: 960379784}
+  - component: {fileID: 508659650251704562}
   - component: {fileID: 960379787}
   - component: {fileID: 960379789}
   m_Layer: 0
-  m_Name: Character
+  m_Name: CharacterTopView
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,7 +132,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 120
+  m_Constraints: 80
   m_CollisionDetection: 1
 --- !u!136 &960379785
 CapsuleCollider:
@@ -189,7 +189,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &960379784
+--- !u!114 &508659650251704562
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -198,17 +198,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 6681616446529338619}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c66e83653362cd4aaffa4e716ca9f9e, type: 3}
+  m_Script: {fileID: 11500000, guid: cfe42a9ecb2d8ff4abaf3256edf75990, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   runSpeed: 8
   walkSpeed: 12
   myRigibody: {fileID: 960379788}
-  gravityScale: 4
+  gravityScale: 5
   myCamera: {fileID: 0}
   closest: -10
   farthest: -20
-  jumpHeight: 10
+  jumpHeight: 3
 --- !u!114 &960379787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,8 +260,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 960379784}
-        m_TargetAssemblyTypeName: CharacterController, Assembly-CSharp
+      - m_Target: {fileID: 508659650251704562}
+        m_TargetAssemblyTypeName: CharacterControllerTopView, Assembly-CSharp
         m_MethodName: Move
         m_Mode: 0
         m_Arguments:
@@ -276,8 +276,8 @@ MonoBehaviour:
     m_ActionName: Player/Movement[/XInputControllerWindows/leftStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/right,/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 960379784}
-        m_TargetAssemblyTypeName: CharacterController, Assembly-CSharp
+      - m_Target: {fileID: 508659650251704562}
+        m_TargetAssemblyTypeName: CharacterControllerTopView, Assembly-CSharp
         m_MethodName: Jump
         m_Mode: 0
         m_Arguments:
@@ -308,8 +308,8 @@ MonoBehaviour:
     m_ActionName: Player/ResetSize[/XInputControllerWindows/buttonEast,/Keyboard/e]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 960379784}
-        m_TargetAssemblyTypeName: CharacterController, Assembly-CSharp
+      - m_Target: {fileID: 508659650251704562}
+        m_TargetAssemblyTypeName: CharacterControllerTopView, Assembly-CSharp
         m_MethodName: CameraZoom
         m_Mode: 0
         m_Arguments:
@@ -323,7 +323,19 @@ MonoBehaviour:
     m_ActionId: 2a465aab-ef52-48dc-8289-fd381e9b2d6f
     m_ActionName: Player/CameraControl[/XInputControllerWindows/rightStick/down,/XInputControllerWindows/rightStick/up,/Keyboard/q,/Keyboard/e]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 508659650251704562}
+        m_TargetAssemblyTypeName: CharacterControllerTopView, Assembly-CSharp
+        m_MethodName: OnInteract
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 1cd0d1bf-f3d8-41c5-b55f-4ec22006d1ea
     m_ActionName: Player/Interact[/Keyboard/f,/XInputControllerWindows/buttonWest]
   m_NeverAutoSwitchControlSchemes: 0
